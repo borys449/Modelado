@@ -1,5 +1,9 @@
 # 1. Imagen base 
 FROM nginx:alpine
+# Copia el contenido de tu aplicación web compilada al directorio de Nginx
+COPY ./dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
 
 # 2. Carpeta de trabajo dentro del contenedor
 WORKDIR /usr/share/nginx/html
