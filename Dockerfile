@@ -1,21 +1,18 @@
-# 1. Imagen base 
+# 1. Imagen base de Nginx
 FROM nginx:alpine
-# Copia el contenido de tu aplicación web compilada al directorio de Nginx
-COPY ./dist /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
 
-# 2. Carpeta de trabajo dentro del contenedor
-WORKDIR /usr/share/nginx/html
-
-# 3. modificacion pra cambiar el puerto de escucha de nginx a 8080 (opcional, pero recomendado para evitar conflictos con otros servicios)
+# 2. Cambiar el puerto de escucha de Nginx a 8080 (Obligatorio para Cloud Run)
 RUN sed -i 's/listen[: ]*80;/listen 8080;/g' /etc/nginx/conf.d/default.conf
 
-# 4. Copiar todo el código de tu proyecto (index.html, carpeta css) al contenedor
+# 3. Definir la carpeta de trabajo de Nginx
+WORKDIR /usr/share/nginx/html
+
+# 4. Copiar los archivos de la raíz de tu proyecto al contenedor
+# (Esto copiará tu index.html y archivos principales)
 COPY . .
 
-# 5. Puerto a usar
+# 5. Informar el puerto correcto
 EXPOSE 8080
 
-# 6. Comando para arrancar el servidor web Nginx
+# 6. Arrancar Nginx
 CMD ["nginx", "-g", "daemon off;"]
